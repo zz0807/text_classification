@@ -1,10 +1,11 @@
 from bow import BagOfWords
 from bow import WordFilters
 from sklearn.ensemble import RandomForestClassifier
-import xlwt
 from get_result_file import result_excel
+from cv import k_fold
 
-file = open('train_2000.label','r')
+
+file = open('train_1000.label','r')
 label = [] # label for every sentence
 total_word = []  # to store the word that appeared in the file in list
 sentence_total = [] # to store every sentence in file in list
@@ -89,27 +90,22 @@ for sentence in sentence_total1:
                 temp[temp_key] = sentence[sentence_key]
     sample_list.append(temp)
 
-test = []
-test_sentence = []
-# convert dict value into list
-for i in sample_list:
-    test_sentence = list(i.values())
-    test.append(test_sentence)
-#test
+k_fold(data,label)
+# test = []
+# test_sentence = []
+# # convert dict value into list
+# for i in sample_list:
+#     test_sentence = list(i.values())
+#     test.append(test_sentence)
+# #test
 
-# random forest model
-rf = RandomForestClassifier()
-rf.fit(data,label)
-RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
-            max_depth=None, max_features='auto', max_leaf_nodes=None,
-            min_samples_leaf=1, min_samples_split=2,
-            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
-            oob_score=False, random_state=None, verbose=0,
-            warm_start=False)
-
-# store the result in excel file
-result = []
-result = rf.predict(test)
-
-result_excel('TREC_10.label',result)
+# # random forest model
+# rf = RandomForestClassifier(max_features=None,bootstrap=False)
+# rf.fit(data,label)
+# # store the result in excel file
+# result = []
+# result = rf.predict(test)
+#
+# correct_rate = result_excel('TREC_10.label',result)
+# print "%.2f%%" % (correct_rate*100)
 

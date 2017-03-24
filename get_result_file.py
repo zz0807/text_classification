@@ -24,6 +24,8 @@ def result_excel(file_name,predict):
     data = []
     file = open(file_name, 'r')
     i = 0
+    total = 0
+    correct = 0
     for line in file:
         row = []
         # erase illegal word
@@ -43,10 +45,13 @@ def result_excel(file_name,predict):
         row.append(predict[i])
         if(predict[i] == coarse):
             judge = 'T'
-        else:judge = 'F'
+            correct += 1
+        else:
+            judge = 'F'
         i += 1
         row.append(judge)
         data.append(row)
+        total += 1
     file.close()
     hdngs = ['Coarse', 'Fine', 'Sentence', 'Predect', 'Judge']
     kinds = 'text    text          text        text        text'.split()
@@ -57,3 +62,8 @@ def result_excel(file_name,predict):
     }
     data_xfs = [kind_to_xf_map[k] for k in kinds]
     write_xls('result.xls', 'result', hdngs, data, heading_xf, data_xfs)
+
+    correct = float(correct)
+    total = float(total)
+    correct_rate = correct/total
+    return correct_rate
